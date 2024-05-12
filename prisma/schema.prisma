@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum UserRole {
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id                 String    @id @default(cuid())
+  name               String?
+  email              String?   @unique
+  emailVerified      DateTime?
+  password           String?
+  role               UserRole  @default(MEMBER)
+  image              String?
+
+  phone               String?
+  address             String?
+  post                String?
+  issueRecords        IssueRecord[] @relation("IssueRecordToUser")
+  memeberId           Int?
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+
+model Shelf{
+  id        String    @id @default(cuid())
+  name      String
+  books     Book[] @relation("BooksToShelf")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Book {
+  id              String   @id @default(uuid())
+  name            String
+
+  imageUrl        String?
+  bannerUrl       String?
+
+  shelfId         String 
+  shelf           Shelf @relation("BooksToShelf",fields: [shelfId],references: [id])
+  shelfCategory   Int
+
+  authors         String
+  publication     String
+  stock           Int
+  total           Int
+
+  price           String?
+  publishedDate   String?
+  description     String?
+  totalPages      String?
+  category        String?
+
+  issues          IssueRecord[]   @relation("IssueRecordToBook")
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([shelfId])
+}
+
+
+
+model ReturnRecord{
+  id            String   @id @default(uuid())
+  bookName      String
+  bookId        String
+  userName    String
+  userId      String
+
+  issuedDate    DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model IssueRecord {
+  id        String   @id @default(uuid())
+
+  bookId    String
+  book      Book @relation("IssueRecordToBook",fields: [bookId],references: [id])
+
+  userId    String @map("memberId")
+  user      User @relation("IssueRecordToUser",fields: [userId],references: [id])
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
