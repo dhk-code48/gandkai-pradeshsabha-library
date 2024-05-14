@@ -13,7 +13,7 @@ export const SchoolSchema = z.object({
 });
 
 export const CategorySchema = z.object({
-  name: z.string().min(2),
+  name: z.string().min(1),
 });
 
 export const MemberSchema = z.object({
