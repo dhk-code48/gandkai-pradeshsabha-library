@@ -10,7 +10,7 @@ export interface ReportInfoProp {
   topBorrowers: { user: User | null; borrowedBooksCount: number }[];
   mostPopularBookIssuesCount: number;
   issueRecords: (IssueRecord & { user: User; book: Book })[];
-  returnRecords: ReturnRecord[];
+  returnRecords: (ReturnRecord & { book: Book | null })[];
 }
 
 export default async function getReportInfo(
@@ -24,6 +24,10 @@ export default async function getReportInfo(
         lte: toDate,
       },
     },
+    include: {
+      book: true,
+    },
+
     orderBy: {
       createdAt: "asc",
     },
@@ -62,7 +66,7 @@ export default async function getReportInfo(
   const bookCounts: Record<string, number> = {};
   returnRecords.forEach((record) => {
     const bookId = record.bookId;
-    bookCounts[bookId] = (bookCounts[bookId] || 0) + 1;
+    bookId && (bookCounts[bookId] = (bookCounts[bookId] || 0) + 1);
   });
 
   const mostPopularBookId = Object.keys(bookCounts).reduce((a, b) =>

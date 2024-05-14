@@ -72,6 +72,7 @@ model Book {
   category        String?
 
   issues          IssueRecord[]   @relation("IssueRecordToBook")
+  returnRecords          ReturnRecord[]   @relation("ReturnRecordToBook")
   
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -84,7 +85,10 @@ model Book {
 model ReturnRecord{
   id            String   @id @default(uuid())
   bookName      String
-  bookId        String
+  bookId        String?
+    book      Book? @relation("ReturnRecordToBook",fields: [bookId],references: [id])
+
+
   userName    String
   userId      String
 

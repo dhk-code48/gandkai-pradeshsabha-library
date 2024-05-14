@@ -17,6 +17,10 @@ const bulkCreateMember = async (members: User[]) => {
           password: hashedPass,
           address: member.address,
           phone: member.phone,
+          memeberId: member.memeberId,
+          post: member.post,
+          id: member.id,
+          role: "MEMBER",
         },
       });
     });

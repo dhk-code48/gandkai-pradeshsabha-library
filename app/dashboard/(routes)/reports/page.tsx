@@ -44,8 +44,10 @@ const ReportGenerator = () => {
     <div className="space-y-10">
       {openPrint && reportInfo && (
         <div className="fixed z-50 top-0 left-0 w-screen overflow-y-scroll h-screen bg-white">
-          <div id="report" ref={componentRef}>
-            <PrintableReport reportInfo={reportInfo} endDate={endDate} startDate={startDate} />
+          <div className="flex h-full w-full items-center justify-center">
+            <div id="report" ref={componentRef}>
+              <PrintableReport reportInfo={reportInfo} endDate={endDate} startDate={startDate} />
+            </div>
           </div>
           <div
             id="hideItWhilePrinting"

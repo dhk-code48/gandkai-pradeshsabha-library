@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { Printer, X } from "lucide-react";
 import React from "react";
+import { useReactToPrint } from "react-to-print";
 
 const MemberCardPrint = ({
   isOpen,
@@ -14,9 +15,17 @@ const MemberCardPrint = ({
   close: () => void;
   user: User;
 }) => {
-  function handlePrint() {
-    print();
-  }
+  const componentRef = React.useRef(null);
+
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+
+  const handlePrint = useReactToPrint({
+    content: reactToPrintContent,
+    documentTitle: "AwesomeFileName",
+    removeAfterPrint: true,
+  });
 
   return (
     <div
@@ -33,7 +42,9 @@ const MemberCardPrint = ({
           Print <Printer size={18} />
         </Button>
       </div>
-      <MemberLibraryCard user={user} />
+      <div id="report" ref={componentRef}>
+        <MemberLibraryCard user={user} />
+      </div>
     </div>
   );
 };

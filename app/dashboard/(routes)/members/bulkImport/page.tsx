@@ -54,11 +54,14 @@ const BookBulkImport = () => {
               ...prev,
               {
                 id: generateRandomId(13),
-                memeberId: parseInt(row[0].toString()),
+                memeberId: parseInt(row[0]?.toString()),
                 name: row[1]?.toString(),
                 post: row[2]?.toString(),
                 phone: row[3]?.toString(),
-                email: row[4]?.toString(),
+                email:
+                  row[4]?.toString() === "."
+                    ? i + "gandakipradeshsabha@gmail.com"
+                    : row[4]?.toString(),
 
                 image: row[5]?.toString(),
 

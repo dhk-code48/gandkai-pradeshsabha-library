@@ -13,7 +13,14 @@ export const MemberColumns: ColumnDef<User & { issueRecords: (IssueRecord & { bo
       cell: ({ row }) => {
         const image: string = row.getValue("image");
 
-        return <Image src={"/img/" + image} width={50} height={50} alt="User Profile" />;
+        return (
+          <Image
+            src={image ? "/img/" + image : "/avatar.png"}
+            width={50}
+            height={50}
+            alt="User Profile"
+          />
+        );
       },
     },
     {
