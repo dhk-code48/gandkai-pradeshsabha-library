@@ -152,7 +152,7 @@ export const IssueForm: React.FC<CategoryFormProps> = ({ initialData, members })
       members.forEach((member) =>
         setMembersOptions((prev) => [
           ...prev,
-          { label: member.name + " (" + member.phone + ")", value: member.id },
+          { label: member.name + " (" + member.id + ")", value: member.id },
         ])
       );
   }, [members]);

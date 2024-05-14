@@ -6,11 +6,9 @@ const AuthLogin = () => {
     <div className="space-y-10">
       <div className="flex flex-col space-y-2 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Login with your credentials
+          आफ्नो प्रमाणहरु संग लगइन गर्नुहोस्{" "}
         </h1>
-        <p className="text-sm text-muted-foreground">
-          Enter your email below to access worksheets
-        </p>
+        <p className="text-sm text-muted-foreground">तल आफ्नो इमेल प्रविष्ट गर्नुहोस्</p>
       </div>
       <LoginForm />
     </div>

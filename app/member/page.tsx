@@ -15,11 +15,12 @@ import Link from "next/link";
 import { fetchBooks } from "@/actions/getBooks";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const HomeBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [booksPerPage] = useState(5);
+  const [booksPerPage] = useState(9);
   const [totalBooks, setTotalBooks] = useState(0);
   const [bookName, setBookName] = useState("");
 
@@ -59,10 +60,17 @@ const HomeBooks = () => {
                 <CardHeader>
                   <CardTitle className="text-left tracking-wide leading-78">{book.name}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-1">
                   <p>Authors : {book.authors}</p>
                   <p>Publication : {book.publication}</p>
-                  <div>{book.stock > 0 ? "Available" : "Out of stock"}</div>
+                  <div
+                    className={cn(
+                      "px-3 rounded-full w-fit",
+                      book.stock > 0 ? "bg-green-500" : "bg-red-500"
+                    )}
+                  >
+                    {book.stock > 0 ? "Available" : "Out of stock"}
+                  </div>
                 </CardContent>
               </Card>
             </Link>

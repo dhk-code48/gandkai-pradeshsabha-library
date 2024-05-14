@@ -47,7 +47,7 @@ export const createBook = async (values: z.infer<typeof BookSchema>) => {
       },
     });
   } catch (error) {
-    console.log("CREATE_BOOK_ERROR");
+    console.log("CREATE_BOOK_ERROR", error);
     return { error: "Something went wrong" };
   }
 
