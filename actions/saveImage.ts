@@ -23,8 +23,8 @@ export async function saveImageToPublic(imageUrl: string, imageName: string) {
     const buffer = Buffer.from(arrayBuffer);
 
     // Write the image buffer to the public folder
-    await writeFile(`public/img/${imageName}${imageFormat}`, buffer);
-    return { imageUrl: `${imageName}${imageFormat}`, success: "Record Created !" };
+    await writeFile(`public/img/${imageName}.${imageFormat}`, buffer);
+    return { imageUrl: `${imageName}.${imageFormat}`, success: "Record Created !" };
   } catch (error) {
     return { error: "Something went wrong" };
   }

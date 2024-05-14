@@ -16,20 +16,17 @@ interface BooksClientProps {
 }
 
 export const BooksClient: React.FC<BooksClientProps> = ({ data }) => {
-  const params = useParams();
   const router = useRouter();
 
   return (
     <>
       <div className="flex items-center justify-between">
-        <Heading
-          title={`Books (${data.length})`}
-          description="Manage books for your school"
-        />
+        <Heading title={`Books (${data.length})`} description="Manage books for your school" />
         <div className="flex items-center gap-x-5">
           <Button onClick={() => router.push(`/dashboard/books/new`)}>
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Button>
+
           <Link className={buttonVariants()} href="/dashboard/books/bulkImport">
             Bulk Registration
           </Link>

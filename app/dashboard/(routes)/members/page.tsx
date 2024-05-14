@@ -9,7 +9,7 @@ const MembersPage = async () => {
       role: "MEMBER",
     },
     orderBy: {
-      createdAt: "desc",
+      memeberId: "asc",
     },
     include: {
       issueRecords: {
