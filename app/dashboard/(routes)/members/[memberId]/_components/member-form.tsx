@@ -49,7 +49,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({ initialData }) => {
       name: initialData?.name || "",
       email: initialData?.email || "",
       password: "",
-      image: initialData?.image || "",
       phone: initialData?.phone || "",
       address: initialData?.address || "",
       post: initialData?.post || "",
@@ -62,7 +61,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ initialData }) => {
     data.append("id", file?.name || "");
 
     try {
-      const baseurl = "http://localhost:3000";
+      const baseurl = process.env.NEXT_PUBLIC_URL;
       const apiUrl = baseurl + "/api/upload";
 
       if (!baseurl) {
@@ -81,7 +80,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ initialData }) => {
     startTransition(() => {
       initialData &&
         initialData.id &&
-        updateMember(values, initialData.id)
+        updateMember(values, initialData, file?.name)
           .then((data) => {
             if (data?.error) {
               form.reset();
@@ -96,7 +95,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ initialData }) => {
           })
           .catch(() => toast.error("Something went wrong"));
       !initialData &&
-        createMember(values)
+        createMember(values, file?.name)
           .then((data) => {
             if (data?.error) {
               form.reset();
@@ -109,7 +108,10 @@ export const MemberForm: React.FC<MemberFormProps> = ({ initialData }) => {
               window.location.assign("/dashboard/members/");
             }
           })
-          .catch(() => toast.error("Something went wrong"));
+          .catch((error) => {
+            console.log("ERROR_MEMBER_FORM => ", error);
+            toast.error("Something went wrong");
+          });
     });
   };
 
@@ -159,7 +161,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({ initialData }) => {
             placeholder="Choose Book Cover"
             onChange={(e) => {
               setFile(e.target.files && e.target.files[0]);
-              e.target.files && form.setValue("image", e.target.files[0].name);
             }}
           />
           <div className="md:grid md:grid-cols-3 gap-8">

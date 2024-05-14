@@ -5,13 +5,9 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { Phone } from "lucide-react";
+import { Map, Phone } from "lucide-react";
 
-export default function AuthenticationPage({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthenticationPage({ children }: { children: React.ReactNode }) {
   return (
     <div className="container h-screen flex items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden lg:flex h-full flex-col bg-muted p-10 text-white">
@@ -25,17 +21,17 @@ export default function AuthenticationPage({
         />
         <div className="z-20 flex items-center gap-2">
           <Image
-            src="/gandakipradesh.png"
+            src="/logo.jpg"
             alt="Gandaki Pradesh Library"
             width={512}
             height={512}
-            className="w-20 bg-blend-color-doge"
+            className="w-20 rounded-full bg-blend-color-doge"
           />
           <div className="text-white">
-            <h1 className="text-lg font-extrabold">Pradesh Library</h1>
+            <h1 className="text-2xl text-red-500 font-extrabold">गण्डकी प्रदेश सभा पुस्तकालय</h1>
             <h4 className="font-bold flex items-center gap-x-5">
-              <Phone size={16} />
-              ०६१-४६७८७३
+              <Map size={16} />
+              नदीपुर-पोखरा, नेपाल
             </h4>
           </div>
         </div>
@@ -45,7 +41,7 @@ export default function AuthenticationPage({
               &ldquo;This library has saved me countless hours of work and helped me deliver
               stunning designs to my clients faster than ever before.&rdquo;
             </p> */}
-            <footer className="text-sm">Gandaki Pradesh</footer>
+            <footer className="text-sm">गण्डकी प्रदेश सभा</footer>
           </blockquote>
         </div>
       </div>

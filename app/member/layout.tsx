@@ -15,19 +15,13 @@ const MemberLayout = async ({ children }: { children: React.ReactNode }) => {
     session.user.role === "ADMIN" ? redirect("/dashboard") : redirect("/auth/login");
   }
   return (
-    <div>
+    <div className="mb-20">
       <div className="container py-5 border-b flex items-center justify-between">
         <div className="flex gap-x-5">
-          <Image
-            src="/gandakipradesh.png"
-            className="w-[70px]"
-            width={100}
-            height={70}
-            alt="Logo"
-          />
+          <Image src="/logo.jpg" className="w-[70px]" width={100} height={70} alt="Logo" />
           <div>
-            <h1 className="text-xl font-bold">Gandkai Pradeshsabha Library</h1>
-            <p>Nadipur - Pokhara, nepal</p>
+            <h1 className="text-xl font-bold text-red-500">गण्डकी प्रदेश सभा पुस्तकालय</h1>
+            <p className="text-blue-700 font-bold">नदीपुर-पोखरा, नेपाल</p>
           </div>
         </div>
         <UserButton userName={session.user.name} email={session.user.email} />

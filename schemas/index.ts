@@ -20,7 +20,7 @@ export const MemberSchema = z.object({
   name: z.string().min(2),
   email: z.string().min(2),
   password: z.string().min(2),
-  image: z.string().min(2),
+
   phone: z.string().min(2),
   address: z.string().min(2),
   post: z.string().min(2),
