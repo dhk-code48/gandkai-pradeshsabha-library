@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -46,15 +46,25 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const inRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Enter") {
+        if (inRef.current) {
+          inRef.current.value = "";
+        }
+      }
+    });
+  }, [inRef.current?.value]);
+
   return (
     <div>
       <div className="flex items-center py-4">
         <Input
           placeholder="Search"
+          ref={inRef}
           value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(searchKey)?.setFilterValue(event.target.value)
-          }
+          onChange={(event) => table.getColumn(searchKey)?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
       </div>
@@ -68,10 +78,7 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -81,26 +88,17 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

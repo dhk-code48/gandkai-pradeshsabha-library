@@ -41,9 +41,9 @@ const BookBulkImport = () => {
               ...prev,
               {
                 id: row[0]?.toString(),
-                name: row[1]?.toString(),
-                publication: row[2]?.toString(),
-                authors: row[3]?.toString(),
+                name: row[1]?.toString() || ".",
+                publication: row[2]?.toString() || ".",
+                authors: row[3]?.toString() || ".",
 
                 stock: parseInt(row[4]?.toString()),
                 total: parseInt(row[4]?.toString()),
