@@ -35,6 +35,7 @@ import { AlertModal } from "@/components/modals/alert-modal";
 import { createBook } from "@/actions/createBook";
 import uploadImage from "@/actions/uploadImage";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type ProductFormValues = z.infer<typeof BookSchema>;
 
@@ -49,6 +50,7 @@ export const BookForm: React.FC<BookFormProps> = ({ initialData, shelfs }) => {
   const title = initialData ? "Edit Book" : "Create Book";
   const description = initialData ? "Edit a Book." : "Add a new Book";
   const action = initialData ? "Save changes" : "Create";
+  const router = useRouter();
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -89,7 +91,7 @@ export const BookForm: React.FC<BookFormProps> = ({ initialData, shelfs }) => {
             if (data?.success) {
               form.reset();
               toast.success(data.success);
-              window.location.assign("/dashboard/books/" + initialData.id);
+              router.refresh();
             }
           })
           .catch(() => toast.error("Something went wrong"));
@@ -105,7 +107,8 @@ export const BookForm: React.FC<BookFormProps> = ({ initialData, shelfs }) => {
             if (data?.success) {
               form.reset();
               toast.success(data.success);
-              window.location.assign("/dashboard/books/");
+              router.refresh();
+              router.push("/dashboard/books/");
             }
           })
           .catch(() => toast.error("Something went wrong"));

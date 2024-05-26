@@ -8,7 +8,7 @@ import getReportInfo, { ReportInfoProp } from "@/actions/getReportInfo";
 import { Printer, X } from "lucide-react";
 import PrintableReport from "@/components/printable-report";
 import { Book, User } from "@prisma/client";
-import { useReactToPrint } from "react-to-print";
+import ReactToPrint from "react-to-print";
 
 const ReportGenerator = () => {
   const [startDate, setStartDate] = useState<Date>();
@@ -29,22 +29,72 @@ const ReportGenerator = () => {
     }
   }
   const componentRef = React.useRef(null);
+  const onBeforeGetContentResolve = React.useRef<(() => void) | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [text, setText] = React.useState<string>("old boring text");
 
+  const handleAfterPrint = React.useCallback((): void => {
+    console.log("`onAfterPrint` called");
+  }, []);
+
+  const handleBeforePrint = React.useCallback((): void => {
+    console.log("`onBeforePrint` called");
+  }, []);
+  const handleOnBeforeGetContent = React.useCallback((): Promise<void> => {
+    console.log("`onBeforeGetContent` called");
+    setLoading(true);
+    setText("Loading new text...");
+
+    return new Promise((resolve) => {
+      onBeforeGetContentResolve.current = resolve;
+
+      setTimeout(() => {
+        setLoading(false);
+        setText("New, Updated Text!");
+        resolve();
+      }, 2000);
+    });
+  }, [setLoading, setText]);
+
+  React.useEffect(() => {
+    if (text === "New, Updated Text!" && typeof onBeforeGetContentResolve.current === "function") {
+      onBeforeGetContentResolve.current();
+    }
+  }, [text]);
   const reactToPrintContent = React.useCallback(() => {
     return componentRef.current;
   }, [componentRef.current]);
 
-  const handlePrint = useReactToPrint({
-    content: reactToPrintContent,
-    documentTitle: "AwesomeFileName",
-    removeAfterPrint: true,
-  });
+  const reactToPrintTrigger = React.useCallback((): React.ReactElement => {
+    // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+    // to the root node of the returned component as it will be overwritten.
+
+    // Bad: the `onClick` here will be overwritten by `react-to-print`
+    // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
+
+    // Good
+    return (
+      <Button className="gap-x-3 fixed z-50 top-10">
+        Print <Printer size={14} />
+      </Button>
+    );
+  }, []);
 
   return (
     <div className="space-y-10">
       {openPrint && reportInfo && (
         <div className="fixed z-50 top-0 left-0 w-screen overflow-y-scroll h-screen bg-white">
           <div className="flex h-full w-full items-center justify-center">
+            <ReactToPrint
+              content={reactToPrintContent}
+              documentTitle="AwesomeFileName"
+              onAfterPrint={handleAfterPrint}
+              onBeforeGetContent={handleOnBeforeGetContent}
+              onBeforePrint={handleBeforePrint}
+              removeAfterPrint
+              trigger={reactToPrintTrigger}
+            />
+            {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
             <div id="report" ref={componentRef}>
               <PrintableReport reportInfo={reportInfo} endDate={endDate} startDate={startDate} />
             </div>
@@ -55,9 +105,6 @@ const ReportGenerator = () => {
           >
             <Button variant="destructive" onClick={() => setOpenPrint(false)}>
               <X />
-            </Button>
-            <Button className="gap-x-3" onClick={() => handlePrint()}>
-              Print <Printer size={14} />
             </Button>
           </div>
         </div>

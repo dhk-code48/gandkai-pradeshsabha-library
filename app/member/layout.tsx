@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { UserButton } from "@/components/user-button";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -24,9 +25,17 @@ const MemberLayout = async ({ children }: { children: React.ReactNode }) => {
             <p className="text-blue-700 font-bold">नदीपुर-पोखरा, नेपाल</p>
           </div>
         </div>
-        <UserButton userName={session.user.name} email={session.user.email} />
+        <div className="space-x-10">
+          <Link className="font-semibold" href="/member">
+            Books
+          </Link>
+          <Link className="font-semibold" href="/member/issueRecords">
+            Issue Record
+          </Link>
+          <UserButton userName={session.user.name} email={session.user.email} />
+        </div>
       </div>
-      {children}
+      <div className="container mt-10">{children}</div>
     </div>
   );
 };

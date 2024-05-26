@@ -10,68 +10,64 @@ const MemberLibraryCard = ({ user }: { user: User }) => {
     setError(false);
   }, [user.image]);
   return (
-    <div className="relative flex h-[21cm] w-[14.8cm] flex-col items-center space-y-10 rounded-xl border py-0">
+    <div className="relative flex h-[12.4cm] w-[8.4cm] mb-[2.45cm] flex-col items-center space-y-5 rounded-xl border py-0">
       <div className="absolute top-[53%] -z-10">
         <Image
           alt="gandaki pradesh"
-          width={200}
-          height={200}
+          width={100}
+          height={100}
           src={"/logo.jpg"}
-          className="h-[200px] w-[200px] opacity-15"
+          className="h-[100px] w-100px] opacity-15"
         />
       </div>
       <div className="flex mx-5 gap-x-6 text-center">
         <Image
           alt="Gandaki Pradesh Sabha Logo"
-          width={63}
+          width={53}
           height={53}
           src="/logo.jpg"
-          className="h-[103] w-[103px]"
+          className="h-[53px] w-[53px]"
         />
         <div className="space-y-1">
-          <h1 className="text-xl font-bold tracking-wider text-[#dc143c]">
-            गण्डकी प्रदेश सभा पुस्तकालय
-          </h1>
-          <p className="font-bold text-[#2760b8]">नदीपुर, पोखरा, नेपाल</p>
+          <h1 className="font-bold tracking-wider text-[#dc143c]">गण्डकी प्रदेश सभा पुस्तकालय</h1>
+          <p className="text-sm font-bold text-[#2760b8]">नदीपुर, पोखरा, नेपाल</p>
         </div>
         <Image
           alt="nepal flag"
-          width={53}
-          height={53}
+          width={43}
+          height={43}
           src="/flag.webp"
-          className="h-[83px] w-[80px]"
+          className="h-[43px] w-[40px]"
         />
       </div>
       <div className="relative">
-        <div className="h-[225px] w-[225px] rounded-full bg-[#2760b8]"></div>
-        <div className="absolute left-[9px] top-[9px]">
+        {/* <div className="h-[125px] w-[125px] rounded-full bg-[#2760b8]"></div> */}
+        <div className="border-4 border-blue-500 rounded-full">
           <Image
             width={100}
             height={100}
             alt="User Profile"
             src={!error ? "/img/" + user.image : "/avatar.png"}
             onError={() => setError(true)}
-            className="h-[207px] w-[207px] rounded-full object-cover"
+            className="h-[107px] w-[107px] rounded-full object-cover"
           />
         </div>
       </div>
-      <h1 className="text-2xl font-black tracking-wide">{user.name}</h1>
+      <h1 className="text-xl font-black tracking-wide">{user.name}</h1>
       <div className="flex w-full justify-evenly">
         <div className="space-y-1">
           <p>Email</p>
-          <p>Name</p>
           <p>Post</p>
           <p>Phone</p>
         </div>
         <div className="space-y-1">
           <p>: {user.email}</p>
-          <p>: {user.name}</p>
           <p>: {user.post}</p>
           <p>: {user.phone}</p>
         </div>
       </div>
       <div className="absolute bottom-5">
-        <Barcode value={user.id} width={1} />
+        <Barcode fontSize={15} value={user.id} width={1} height={30} />
       </div>
     </div>
   );
