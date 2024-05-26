@@ -24,12 +24,9 @@ export const IssueRecordsClient: React.FC<CategoriesClientProps> = ({ data }) =>
           title={`Issue Records (${data.length})`}
           description="Manage Issue Records for your site"
         />
-        <Button onClick={() => router.push(`/dashboard/issueRecords/new`)}>
-          <Plus className="mr-2 h-4 w-4" /> Issue Book
-        </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data} />
+      <DataTable searchKey="bookId" columns={columns} data={data} />
     </>
   );
 };

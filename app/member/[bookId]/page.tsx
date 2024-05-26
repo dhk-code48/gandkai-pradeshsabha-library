@@ -1,5 +1,6 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import prismadb from "@/lib/prismadb";
+import { cn } from "@/lib/utils";
 import { MoveLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,7 +33,10 @@ const HomeBookPage = async ({ params }: { params: { bookId: string } }) => {
           <div>
             <h1 className="font-bold text-3xl">{book.name}</h1>
             <p className="text-muted-foreground mt-1">Publication : {book.publication}</p>
-            <p className="text-muted-foreground mt-1">authors : {book.authors}</p>
+            <p className="text-muted-foreground mt-1">Authors : {book.authors}</p>
+            <p className="text-muted-foreground mt-1">
+              Shelf Number : {book.shelfId} ` {String.fromCharCode(64 + book.shelfCategory)} `
+            </p>
           </div>
           <div className="gap-x-5 items-center">
             <p className="text-muted-foreground mt-1">
@@ -41,7 +45,15 @@ const HomeBookPage = async ({ params }: { params: { bookId: string } }) => {
             <p className="text-muted-foreground mt-1">
               <strong className="text-gray-900">Total Book Issued </strong>:{" "}
               {book.total - book.stock}
-            </p>
+            </p>{" "}
+            <div
+              className={cn(
+                "px-3 rounded-full w-fit",
+                book.stock > 0 ? "bg-green-500" : "bg-red-500"
+              )}
+            >
+              {book.stock > 0 ? "Available" : "Out of stock"}
+            </div>
           </div>
         </div>
       </div>

@@ -9,8 +9,8 @@ import { Heading } from "@/components/ui/heading";
 
 import { MemberColumns } from "./columns";
 import { Book, IssueRecord, User } from "@prisma/client";
-import { useCallback, useRef, useState } from "react";
-import { useReactToPrint } from "react-to-print";
+import React, { useCallback, useRef, useState } from "react";
+import ReactToPrint from "react-to-print";
 import MemberCardPrint from "./member-card-print";
 import MemberLibraryCard from "@/components/member-library-card";
 
@@ -23,37 +23,84 @@ export const MembersClient: React.FC<MembersClientProps> = ({ data }) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const componentRef = useRef(null);
+  const componentRef = React.useRef(null);
+  const onBeforeGetContentResolve = React.useRef<(() => void) | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [text, setText] = React.useState<string>("old boring text");
 
-  const reactToPrintContent = useCallback(() => {
+  const handleAfterPrint = React.useCallback((): void => {
+    console.log("`onAfterPrint` called");
+  }, []);
+
+  const handleBeforePrint = React.useCallback((): void => {
+    console.log("`onBeforePrint` called");
+  }, []);
+  const handleOnBeforeGetContent = React.useCallback((): Promise<void> => {
+    console.log("`onBeforeGetContent` called");
+    setLoading(true);
+    setText("Loading new text...");
+
+    return new Promise((resolve) => {
+      onBeforeGetContentResolve.current = resolve;
+
+      setTimeout(() => {
+        setLoading(false);
+        setText("New, Updated Text!");
+        resolve();
+      }, 2000);
+    });
+  }, [setLoading, setText]);
+
+  React.useEffect(() => {
+    if (text === "New, Updated Text!" && typeof onBeforeGetContentResolve.current === "function") {
+      onBeforeGetContentResolve.current();
+    }
+  }, [text]);
+  const reactToPrintContent = React.useCallback(() => {
     return componentRef.current;
   }, [componentRef.current]);
 
-  const handlePrint = useReactToPrint({
-    content: reactToPrintContent,
-    documentTitle: "AwesomeFileName",
-    removeAfterPrint: true,
-  });
+  const reactToPrintTrigger = React.useCallback((): React.ReactElement => {
+    // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+    // to the root node of the returned component as it will be overwritten.
 
+    // Bad: the `onClick` here will be overwritten by `react-to-print`
+    // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
+
+    // Good
+    return (
+      <Button className="gap-x-3 fixed z-50 top-24 right-10">
+        Print <Printer size={14} />
+      </Button>
+    );
+  }, []);
   return (
     <>
       {isOpen && (
         <div className="fixed z-50 top-0 left-0 w-screen h-screen overflow-y-scroll bg-white">
-          <div ref={componentRef}>
-            {data.map((member, i) => {
-              return <MemberLibraryCard key={i + "member"} user={member} />;
-            })}
+          <div className="flex h-full w-full">
+            <ReactToPrint
+              content={reactToPrintContent}
+              documentTitle="AwesomeFileName"
+              onAfterPrint={handleAfterPrint}
+              onBeforeGetContent={handleOnBeforeGetContent}
+              onBeforePrint={handleBeforePrint}
+              removeAfterPrint
+              trigger={reactToPrintTrigger}
+            />
+            {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
+            <div ref={componentRef}>
+              {data.map((member, i) => (
+                <MemberLibraryCard key={i + "member"} user={member} />
+              ))}
+            </div>
           </div>
-
           <div
             id="hideItWhilePrinting"
             className="fixed gap-y-5 top-10 right-10 flex flex-col z-[60]"
           >
             <Button variant="destructive" onClick={() => setIsOpen(false)}>
               <X />
-            </Button>
-            <Button className="gap-x-3" onClick={() => handlePrint()}>
-              Print <Printer size={14} />
             </Button>
           </div>
         </div>

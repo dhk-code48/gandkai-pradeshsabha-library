@@ -5,6 +5,8 @@ import { IssueRecordColumn, columns } from "../../issueRecords/_components/colum
 import moment from "moment";
 import { Heading } from "@/components/ui/heading";
 import { DataTable } from "@/components/ui/data-table";
+import Barcode from "react-barcode";
+import BookBarcode from "./_components/book-barcode";
 
 const BookPage = async ({ params }: { params: { bookId: string; schoolId: string } }) => {
   const book = await prismadb.book.findUnique({
@@ -38,6 +40,7 @@ const BookPage = async ({ params }: { params: { bookId: string; schoolId: string
       <div className="flex-1 space-y-4 p-8 pt-6">
         <BookForm initialData={book} shelfs={shelfs} />
       </div>
+      {book && <BookBarcode id={book.id} />}
       {book && (
         <Heading
           title={book.name + " Issue Record"}

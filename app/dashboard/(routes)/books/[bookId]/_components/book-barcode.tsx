@@ -1,20 +1,11 @@
-import MemberLibraryCard from "@/components/member-library-card";
+"use client";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { User } from "@prisma/client";
-import { Printer, X } from "lucide-react";
+import { PrinterIcon } from "lucide-react";
 import React from "react";
+import Barcode from "react-barcode";
 import ReactToPrint from "react-to-print";
 
-const MemberCardPrint = ({
-  isOpen,
-  close,
-  user,
-}: {
-  isOpen: boolean;
-  close: () => void;
-  user: User;
-}) => {
+const BookBarcode = ({ id }: { id: string }) => {
   const componentRef = React.useRef(null);
   const onBeforeGetContentResolve = React.useRef<(() => void) | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -61,40 +52,27 @@ const MemberCardPrint = ({
 
     // Good
     return (
-      <Button className="gap-x-3 fixed z-50 top-24 right-10">
-        Print <Printer size={14} />
+      <Button className="gap-x-3">
+        Print <PrinterIcon size={14} />
       </Button>
     );
   }, []);
+
   return (
-    <div
-      className={cn(
-        "fixed top-0 left-0 z-50 w-screen h-screen bg-white",
-        isOpen ? "block" : "hidden"
-      )}
-    >
-      <div className="fixed z-[60] top-10 right-10 flex flex-col gap-y-5">
-        <Button variant="destructive" onClick={close}>
-          <X />
-        </Button>
-      </div>
-      <div className="flex h-full w-full items-center justify-center">
-        <ReactToPrint
-          content={reactToPrintContent}
-          documentTitle="AwesomeFileName"
-          onAfterPrint={handleAfterPrint}
-          onBeforeGetContent={handleOnBeforeGetContent}
-          onBeforePrint={handleBeforePrint}
-          removeAfterPrint
-          trigger={reactToPrintTrigger}
-        />
-        {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
-        <div id="report" ref={componentRef}>
-          <MemberLibraryCard user={user} />
-        </div>
-      </div>
-    </div>
+    <>
+      <ReactToPrint
+        content={reactToPrintContent}
+        documentTitle="AwesomeFileName"
+        onAfterPrint={handleAfterPrint}
+        onBeforeGetContent={handleOnBeforeGetContent}
+        onBeforePrint={handleBeforePrint}
+        removeAfterPrint
+        trigger={reactToPrintTrigger}
+      />
+      {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
+      <Barcode ref={componentRef} value={id} width={2} />
+    </>
   );
 };
 
-export default MemberCardPrint;
+export default BookBarcode;

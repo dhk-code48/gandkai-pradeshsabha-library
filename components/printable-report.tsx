@@ -123,7 +123,7 @@ const PrintableReport: FC<{
                 <TableHead>Author</TableHead>
                 <TableHead>In Stock</TableHead>
                 <TableHead>Issued Date</TableHead>
-                <TableHead>Returned Date</TableHead>
+                <TableHead>Time Since Issued</TableHead>
               </TableRow>
             </TableHeader>
             <tbody>
@@ -134,9 +134,7 @@ const PrintableReport: FC<{
                   <TableCell>{record.book.authors}</TableCell>
                   <TableCell>{record.book.stock}</TableCell>
                   <TableCell>{moment(record.createdAt).format("MMM Do YYYY")}</TableCell>
-                  <TableCell>
-                    Yet To Return ({moment(record.createdAt).fromNow()} since Issued)
-                  </TableCell>
+                  <TableCell>{moment(record.createdAt).fromNow()} since Issued</TableCell>
                 </TableRow>
               ))}
             </tbody>

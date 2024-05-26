@@ -45,7 +45,7 @@ const HomeBooks = () => {
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   return (
-    <div className="container mt-10 space-y-10">
+    <div className="mt-10 space-y-10">
       <div className="flex items-center gap-x-3">
         <Input
           placeholder="Search Books ..."
