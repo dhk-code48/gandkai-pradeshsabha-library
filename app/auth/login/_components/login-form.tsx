@@ -85,12 +85,7 @@ const LoginForm = ({ className, ...props }: UserAuthFormProps) => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="******"
-                      type="password"
-                    />
+                    <Input {...field} disabled={isPending} placeholder="******" type="password" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,14 +98,6 @@ const LoginForm = ({ className, ...props }: UserAuthFormProps) => {
             Login
           </Button>
         </form>
-        <Button
-          disabled={isPending}
-          onClick={() => window.location.assign("/")}
-          variant="outline"
-          className="w-full"
-        >
-          Go Back
-        </Button>
       </Form>
     </div>
   );

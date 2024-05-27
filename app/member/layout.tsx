@@ -32,6 +32,9 @@ const MemberLayout = async ({ children }: { children: React.ReactNode }) => {
           <Link className="font-semibold" href="/member/issueRecords">
             Issue Record
           </Link>
+          <Link className="font-semibold" href="/user-manual-member.pdf" target="_blank">
+            User Manual
+          </Link>
           <UserButton userName={session.user.name} email={session.user.email} />
         </div>
       </div>
