@@ -26,7 +26,7 @@ export const IssueRecordsClient: React.FC<CategoriesClientProps> = ({ data }) =>
         />
       </div>
       <Separator />
-      <DataTable searchKey="bookId" columns={columns} data={data} />
+      <DataTable columns={columns} data={data} />
     </>
   );
 };

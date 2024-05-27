@@ -38,9 +38,7 @@ export function UserButton({
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{userName}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {email}
-            </p>
+            <p className="text-xs leading-none text-muted-foreground">{email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -48,7 +46,9 @@ export function UserButton({
         <form
           action={async () => {
             "use server";
-            await signOut();
+            await signOut().then(() => {
+              window.location.reload();
+            });
           }}
         >
           <button className="bg-transparent w-full">
