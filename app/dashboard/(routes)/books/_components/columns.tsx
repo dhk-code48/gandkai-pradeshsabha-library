@@ -25,8 +25,8 @@ export const BookColumns: ColumnDef<Book>[] = [
   },
 
   {
-    accessorKey: "authors",
-    header: "Authors",
+    accessorKey: "shelfId",
+    header: "Shelf Number",
   },
   {
     accessorKey: "stock",

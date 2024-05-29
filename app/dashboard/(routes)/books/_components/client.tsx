@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "./data-table";
 import { Heading } from "@/components/ui/heading";
 
 import { BookColumns } from "./columns";
