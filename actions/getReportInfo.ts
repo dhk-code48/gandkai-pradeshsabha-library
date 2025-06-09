@@ -13,10 +13,7 @@ export interface ReportInfoProp {
   returnRecords: (ReturnRecord & { book: Book | null })[];
 }
 
-export default async function getReportInfo(
-  fromDate: string,
-  toDate: string
-): Promise<ReportInfoProp> {
+export default async function getReportInfo(fromDate: string, toDate: string): Promise<ReportInfoProp> {
   const returnRecords = await prismadb.returnRecord.findMany({
     where: {
       createdAt: {
@@ -53,13 +50,12 @@ export default async function getReportInfo(
   console.log("RETURN RECORDS = > ", returnRecords);
 
   // 1. Calculate Average Issue Duration
-  const issueDurations = returnRecords.map((record) => {
+  const issueDurations = returnRecords.map((record: ReturnRecord) => {
     const durations = record.createdAt.getTime() - record.issuedDate.getTime();
     return durations / (1000 * 60 * 60 * 24);
   });
 
-  const averageIssueDuration =
-    issueDurations.reduce((acc, curr) => acc + curr, 0) / issueDurations.length;
+  const averageIssueDuration = issueDurations.reduce((acc, curr) => acc + curr, 0) / issueDurations.length;
 
   // 2. Find Most Popular Book
 
@@ -69,9 +65,7 @@ export default async function getReportInfo(
     bookId && (bookCounts[bookId] = (bookCounts[bookId] || 0) + 1);
   });
 
-  const mostPopularBookId = Object.keys(bookCounts).reduce((a, b) =>
-    bookCounts[a] > bookCounts[b] ? a : b
-  );
+  const mostPopularBookId = Object.keys(bookCounts).reduce((a, b) => (bookCounts[a] > bookCounts[b] ? a : b));
 
   const mostPopularBook = await prismadb.book.findUnique({
     where: { id: mostPopularBookId },
