@@ -55,37 +55,40 @@ export default async function getReportInfo(fromDate: string, toDate: string): P
     return durations / (1000 * 60 * 60 * 24);
   });
 
-  const averageIssueDuration = issueDurations.reduce((acc, curr) => acc + curr, 0) / issueDurations.length;
+  const averageIssueDuration =
+    issueDurations.reduce((acc: number, curr: number) => acc + curr, 0) / issueDurations.length;
 
   // 2. Find Most Popular Book
 
   const bookCounts: Record<string, number> = {};
-  returnRecords.forEach((record) => {
+  returnRecords.forEach((record: ReturnRecord) => {
     const bookId = record.bookId;
     bookId && (bookCounts[bookId] = (bookCounts[bookId] || 0) + 1);
   });
 
-  const mostPopularBookId = Object.keys(bookCounts).reduce((a, b) => (bookCounts[a] > bookCounts[b] ? a : b));
+  const mostPopularBookId = Object.keys(bookCounts).reduce((a: string, b: string) =>
+    bookCounts[a] > bookCounts[b] ? a : b
+  );
 
   const mostPopularBook = await prismadb.book.findUnique({
     where: { id: mostPopularBookId },
   });
 
-  const mostPopularBookIssuesCount = bookCounts[mostPopularBookId] || 0;
+  const mostPopularBookIssuesCount: number = bookCounts[mostPopularBookId] || 0;
 
   // 3. Find Top Borrowers
 
   const userCounts: Record<string, number> = {};
 
-  returnRecords.forEach((record) => {
+  returnRecords.forEach((record: ReturnRecord) => {
     const userId = record.userId;
     userCounts[userId] = (userCounts[userId] || 0) + 1;
   });
 
-  const sortedUserIds = Object.keys(userCounts).sort((a, b) => userCounts[b] - userCounts[a]);
+  const sortedUserIds = Object.keys(userCounts).sort((a: string, b: string) => userCounts[b] - userCounts[a]);
 
   const topBorrowers: { user: User | null; borrowedBooksCount: number }[] = await Promise.all(
-    sortedUserIds.slice(0, 5).map(async (userId) => {
+    sortedUserIds.slice(0, 5).map(async (userId: string) => {
       const user: User | null = await prismadb.user.findUnique({ where: { id: userId } });
       return { user, borrowedBooksCount: userCounts[userId] };
     })
